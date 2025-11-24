@@ -1,0 +1,23 @@
+chaos:
+  enabled: true
+
+  rules:
+    - name: "Order fetch chaos"
+      enabled: true
+
+      match:
+        bean: ".*Service.*"
+        method: "chaosMethod.*|processOrder"
+        pkg: "com.chaos.service"
+      actions:
+        latency:
+          min-ms: 500
+          max-ms: 2500
+          probability: 0.5
+
+        exception:
+          type: "java.lang.RuntimeException"
+          message: "Chaos: forced failure"
+          probability: 1
+
+      mode: LATENCY_ONLY
