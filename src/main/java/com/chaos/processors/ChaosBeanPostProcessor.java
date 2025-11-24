@@ -21,36 +21,22 @@ public class ChaosBeanPostProcessor implements BeanPostProcessor {
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
 
 
-       if(!chaosProps.isEnabled() ||
-            !matchingEngine.isPkgIncluded(ClassUtils.getPackageName(bean.getClass()))
-
+       if(!chaosProps.isEnabled() || !matchingEngine.isPkgIncluded(ClassUtils.getPackageName(bean.getClass()))
        ){
            return bean;
        }
 
-        List<ChaosProperties.RuleConfig> matchedRules = matchingEngine.findMatchingRulesForBean(bean.getClass().getName());
+       List<ChaosProperties.RuleConfig> matchedRules = matchingEngine.findMatchingRulesForBean(bean.getClass().getName());
 
        if(matchedRules.isEmpty()) return bean;
 
        // now we got the bean for which we need to create proxy bean
         ProxyFactory factory = new ProxyFactory(bean);
+
         factory.addAdvice(new ChaosMethodInterceptor(matchingEngine,matchedRules));
         return factory.getProxy();
 
-        /*
-        if(!chaosProps.isEnabled()
-                || !latencyMatchingEngine.isPackageMatching(ClassUtils.getPackageName(bean.getClass()))
-                || !latencyMatchingEngine.isBeanMatching(bean.getClass().getName())
-        ) {
-            return bean;
-        }
 
-        // now all the checks are passed this particular bean is qualified now so we have to inject latency inside the matching method
-        ProxyFactory factory = new ProxyFactory(bean);
-        factory.addAdvice(new ChaosLatencyMethodInterceptor(latencyMatchingEngine, chaosProps));
-
-        return factory.getProxy();
-        */
 
     }
 }

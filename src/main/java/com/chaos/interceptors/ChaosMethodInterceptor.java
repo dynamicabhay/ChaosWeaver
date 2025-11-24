@@ -62,6 +62,7 @@ public class ChaosMethodInterceptor implements MethodInterceptor {
 
     private void maybeLatency(ChaosProperties.LatencyConfig latencyConfig,MethodInvocation invocation){
 
+        if(latencyConfig == null) return;
 
         int minMs = latencyConfig.getMinMs();
         int maxMs = latencyConfig.getMaxMs();
@@ -82,9 +83,10 @@ public class ChaosMethodInterceptor implements MethodInterceptor {
     }
 
     private void maybeException(ChaosProperties.ExceptionConfig exceptionConfig,MethodInvocation invocation) throws Throwable{
+        if(exceptionConfig == null) return;
         log.info("event=injectingChaosException injecting Exception to method {}, type: {} ",invocation.getMethod().getName(),exceptionConfig.getType());
 
-        if(exceptionConfig == null) return;
+
         if(Math.random() > exceptionConfig.getProbability()) return;
 
         throw buildException(exceptionConfig);

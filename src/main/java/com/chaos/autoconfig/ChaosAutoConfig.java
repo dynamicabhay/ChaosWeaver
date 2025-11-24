@@ -12,17 +12,18 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableConfigurationProperties(ChaosProperties.class)
+@ConditionalOnProperty(prefix = "chaos", name = "enabled", havingValue = "true",matchIfMissing = false)
 public class ChaosAutoConfig {
 
     @Bean
-    @ConditionalOnProperty(prefix = "chaos", name = "enabled", havingValue = "true")
-    ChaosBeanPostProcessor chaosBeanPostProcessor(ChaosProperties props,MatchingEngine matchingEngine){
+   // @ConditionalOnProperty(prefix = "chaos", name = "enabled", havingValue = "true",matchIfMissing = false)
+    public static ChaosBeanPostProcessor chaosBeanPostProcessor(ChaosProperties props,MatchingEngine matchingEngine){
         return new ChaosBeanPostProcessor(props,matchingEngine);
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = "chaos", name = "enabled", havingValue = "true")
-    MatchingEngine matchingEngine(ChaosProperties props){
+   // @ConditionalOnProperty(prefix = "chaos", name = "enabled", havingValue = "true",matchIfMissing = false)
+    public static MatchingEngine matchingEngine(ChaosProperties props){
         return new MatchingEngine(props);
     }
 

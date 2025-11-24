@@ -20,7 +20,7 @@ chaos:
           message: "Chaos: forced failure"
           probability: 1
 
-      mode: AUTO
+      mode: LATENCY_ONLY
 
     - name: "Order fetch chaos"
       enabled: true
